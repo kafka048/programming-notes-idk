@@ -217,9 +217,8 @@ Most real-world bugs happen when we ASSUME the shape or type of data.
 Type guards + narrowing prevent those assumptions.
 */
 
-// ------------------------------------------------------
+
 // 1. API RESPONSE HANDLING (VERY COMMON)
-// ------------------------------------------------------
 
 type ApiSuccess = {
   status: "success";
@@ -251,9 +250,8 @@ Practical benefit:
 */
 
 
-// ------------------------------------------------------
+
 // 2. USER INPUT / UNKNOWN DATA
-// ------------------------------------------------------
 
 function handleUserInput(input: unknown) {
   // User input is always unknown
@@ -273,9 +271,8 @@ Practical benefit:
 */
 
 
-// ------------------------------------------------------
+
 // 3. DATABASE OPTIONAL FIELDS (MongoDB-style)
-// ------------------------------------------------------
 
 type DbUser = {
   id: string;
@@ -299,9 +296,8 @@ Practical benefit:
 */
 
 
-// ------------------------------------------------------
+
 // 4. AUTH & PERMISSIONS (SECURITY-CRITICAL)
-// ------------------------------------------------------
 
 type Admin = {
   role: "admin";
@@ -331,9 +327,8 @@ Practical benefit:
 */
 
 
-// ------------------------------------------------------
+
 // 5. CUSTOM TYPE GUARD FOR EXTERNAL DATA
-// ------------------------------------------------------
 
 type ResponseData = {
   data: string;
@@ -365,16 +360,7 @@ Practical benefit:
 */
 
 
-// ======================================================
-// KEY IDEA (REMEMBER THIS)
-// ======================================================
 
-/*
-- Type guards = runtime proof
-- Type narrowing = compiler trust
-- Used whenever data is uncertain
-- Prevents runtime crashes and logic bugs
-*/
 
 
 
