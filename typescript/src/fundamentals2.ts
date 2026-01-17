@@ -158,5 +158,202 @@ function redirectBasedOnRole(role: Role): void {
 }
 
 
-// TOPIC 2: TYPES AND INTERFACE
+// ======================================================
+// TOPIC 2: TYPE vs INTERFACE (WITH RELATED CONCEPTS)
+// ======================================================
 
+/*
+CORE QUESTION:
+How do we model data and contracts correctly in TypeScript?
+Answer:
+- Use `interface` for object contracts
+- Use `type` for composition, unions, and logic
+*/
+
+// ------------------------------------------------------
+// 1. INTERFACE — OBJECT CONTRACT
+// ------------------------------------------------------
+
+interface ChaiOrder {
+  type: string;
+  sugar: number;
+  strong: boolean;
+}
+
+/*
+Why interface here?
+- This is a pure object shape
+- Represents a contract
+- May be extended or implemented
+*/
+
+function makeChai(order: ChaiOrder) {
+  console.log(`Making ${order.type} chai`);
+}
+
+function serveChai(order: ChaiOrder) {
+  console.log(`Serving ${order.type} chai`);
+}
+
+// ------------------------------------------------------
+// 2. INTERFACE WITH CLASSES (PRIMARY USE CASE)
+// ------------------------------------------------------
+
+interface TeaRecipe {
+  water: number;
+  milk: number;
+}
+
+/*
+Interfaces are IDEAL for classes.
+They define what a class MUST implement.
+*/
+
+class MasalaChai implements TeaRecipe {
+  water = 100;
+  milk = 50;
+}
+
+// ------------------------------------------------------
+// 3. INTERFACE EXTENSION
+// ------------------------------------------------------
+
+interface BaseCup {
+  size: "small" | "medium" | "large";
+}
+
+interface BrandedCup extends BaseCup {
+  brand: string;
+}
+/* 
+extends mean:
+Take everything in BaseCup and add more requirements
+In expanded form,, it becomes equivalent to
+*/
+
+interface BrandedCup {
+  size: "small" | "medium" | "large";
+  brand: string;
+}
+
+/* This avoids duplication of the size variable.
+If you duplicated it, and if size changes later, you must update multiple places.
+Introduces unnecessary complications */
+
+/* NOTE: Interface extension is inheritance for shapes, not behavior. */
+
+
+
+// ------------------------------------------------------
+// 4. TYPE — UNION (IMPOSSIBLE WITH INTERFACE)
+// ------------------------------------------------------
+
+type TeaType = "Masala" | "Ginger" | "Black";
+
+/*
+Union types represent VARIANTS.
+Interfaces cannot express this.
+*/
+
+function serveTea(tea: TeaType) {
+  console.log(`Serving ${tea} tea`);
+}
+
+// ------------------------------------------------------
+// 5. TYPE — INTERSECTION (COMPOSITION)
+// ------------------------------------------------------
+
+type BaseChai = {
+  teaLeaves: number;
+};
+
+type ExtraIngredients = {
+  ginger: number;
+};
+
+type GingerTea = BaseChai & ExtraIngredients;
+
+/*
+Intersection combines multiple structures.
+This is composition, not inheritance.
+You must use all properties together, unlike in union.
+*/
+
+const gingerTea: GingerTea = {
+  teaLeaves: 2, // Property from BaseChai
+  ginger: 1, // Property from ExtraIngredients
+};
+
+// ------------------------------------------------------
+// 6. OPTIONAL PROPERTIES
+// ------------------------------------------------------
+
+interface User {
+  username: string;
+  bio?: string;
+}
+
+/*
+Optional properties:
+- May or may not exist
+- Must be checked before usage
+*/ 
+
+const userA: User = { username: "justin" };
+const userB: User = { username: "gaethje", bio: "the dangerous" };
+console.log(userA.bio?.toUpperCase()); /* 
+This is optional chaining. 
+If bio exists, you make all the letters uppercase.
+If it doesn't, then you return an undefined without any crash or error
+Another method can be:
+*/
+const bio = userA.bio ?? "No bio provided";
+console.log(bio.toUpperCase());
+// Now you definitely guarantee a string here.
+
+/* BAD PRACTICES — OPTIONAL PROPERTIES
+❌ Unsafe: optional property may be undefined
+userA.bio.toUpperCase();
+
+❌ Dangerous: type assertion hides the problem */
+(userA.bio as string).toUpperCase();
+// Type assertions do NOT add runtime safety.
+// They only silence the compiler.
+
+
+// ------------------------------------------------------
+// 7. READONLY PROPERTIES
+// ------------------------------------------------------
+
+interface Config {
+  readonly appName: string;
+  version: number;
+}
+
+/*
+Readonly:
+- Can be set once
+- Prevents reassignment
+- Useful for configuration and constants
+*/
+
+const cfg: Config = {
+  appName: "Uber",
+  version: 1,
+};
+
+// cfg.appName = "Ola"; ❌ Compile-time error
+cfg.version = 2; // ✅ Allowed
+
+// ------------------------------------------------------
+// 8. WHEN BOTH LOOK POSSIBLE — DECISION RULE
+// ------------------------------------------------------
+
+/*
+Ask ONE question:
+
+"Is this describing the SHAPE of an object?"
+
+YES → interface
+NO  → type
+*/
