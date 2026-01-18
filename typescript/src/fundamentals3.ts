@@ -197,3 +197,165 @@ FUNCTIONS:
 Operational rule:
 Model data with utility types, model behavior with precise function signatures.
 */
+
+
+// ======================================================
+// TOPIC 3: ARRAYS, TUPLES, AND ENUMS IN TYPESCRIPT
+// ======================================================
+
+
+// ======================================================
+// ARRAYS IN TYPESCRIPT
+// ======================================================
+
+// ------------------------------------------------------
+// 1. BASIC TYPED ARRAYS
+// ------------------------------------------------------
+
+const chaiFlavours: string[] = ["Masala", "Adrak"];
+const rating1: number[] = [4.51, 5.20];
+
+// Alternative generic syntax (functionally identical)
+const rating2: Array<number> = [4.5, 5.0];
+
+/*
+Rule:
+T[] and Array<T> are equivalent.
+Use whichever is more readable in context.
+*/
+
+// ------------------------------------------------------
+// 2. ARRAY OF OBJECTS
+// ------------------------------------------------------
+
+type Coffee = {
+  name: string;
+  price: number;
+  isStrong: boolean;
+};
+
+const menu: Coffee[] = [
+  { name: "Mocha", price: 50, isStrong: true },
+  { name: "Latte", price: 20, isStrong: false },
+  { name: "Espresso", price: 500, isStrong: true },
+];
+
+/*
+Array typing enforces:
+- Correct object shape
+- Consistency across elements
+*/
+
+// ------------------------------------------------------
+// 3. READONLY ARRAYS
+// ------------------------------------------------------
+
+const cities: readonly string[] = ["Delhi", "Pune"];
+
+// cities.push("Mumbai"); ❌ not allowed (mutation blocked)
+
+const states: string[] = ["Bihar", "Rajasthan"];
+states.push("Punjab"); // ✅ allowed
+
+/*
+Readonly arrays:
+- Prevent mutation
+- Useful for constants and config-like data
+*/
+
+// ------------------------------------------------------
+// 4. MULTI-DIMENSIONAL ARRAYS
+// ------------------------------------------------------
+
+const table: number[][] = [
+  [1, 2, 3],
+  [4, 5, 6],
+];
+
+// ======================================================
+// TUPLES IN TYPESCRIPT
+// ======================================================
+
+// ------------------------------------------------------
+// 5. BASIC TUPLES
+// ------------------------------------------------------
+
+let userInfo: [string, number, boolean?];
+
+userInfo = ["amrit", 68];
+userInfo = ["raj", 78, true];
+
+/*
+Tuples:
+- Fixed length
+- Fixed order
+- Each position has a specific type
+*/
+
+// ------------------------------------------------------
+// 6. READONLY TUPLES
+// ------------------------------------------------------
+
+const location: readonly [number, number] = [28.66, 32.22];
+
+// location[0] = 30; ❌ mutation not allowed
+
+// ------------------------------------------------------
+// 7. NAMED TUPLES (READABILITY)
+// ------------------------------------------------------
+
+const novels: [name: string, year: number] = ["Frankenstein", 1831];
+
+/*
+Named tuples:
+- Improve readability
+- Do NOT change runtime behavior
+*/
+
+// ======================================================
+// ENUMS IN TYPESCRIPT
+// ======================================================
+
+// ------------------------------------------------------
+// 8. NUMERIC ENUMS
+// ------------------------------------------------------
+
+enum Status {
+  PENDING = 100,
+  SERVED,      // 101
+  CANCELLED,   // 102
+}
+
+/*
+Numeric enums:
+- Auto-increment values
+- Can cause unintended values if not careful
+*/
+
+// ------------------------------------------------------
+// 9. STRING ENUMS (PREFERRED)
+// ------------------------------------------------------
+
+enum Novels {
+  THRILLER = "Rage of Angels",
+  CLASSIC = "Frankenstein",
+}
+
+/*
+String enums:
+- Explicit
+- Predictable
+- Safer for APIs and logging
+*/
+
+function orderNovels(type: Novels) {}
+
+orderNovels(Novels.CLASSIC);
+
+/*
+Best practices for enums:
+- Keep values homogeneous
+- Prefer string enums over numeric
+- Use `const enum` if values must never change
+*/
+
