@@ -22,3 +22,10 @@ if you want to intentionally overwrite the remote commits
 This rewrites history and can delete remote commits.
 Use only when you own the branch and intend to overwrite.
 
+# TO INSTALL THE TYPES WHEN INSTALLING LIBRARIES
+1. npm i library-name -> this is how you install the libraries generally.
+    usually, most libraries ship the types together and they also get installed.
+    incase they do not,
+
+2. npm i -D @types/library-name
+
