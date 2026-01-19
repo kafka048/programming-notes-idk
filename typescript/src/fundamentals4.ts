@@ -1,5 +1,5 @@
 // ======================================================
-// DATE: 18/01/25
+// DATE: 19/01/25
 // TOPIC: OOP CONCEPTS IN TYPESCRIPT
 // ======================================================
 
@@ -8,7 +8,7 @@
 // 1. CLASSES & CONSTRUCTORS
 // ======================================================
 
-class Coffee {
+class Cafe {
   isBlack: boolean;
   price: number;
 
@@ -18,7 +18,7 @@ class Coffee {
   }
 }
 
-const bulletCoffee = new Coffee(true, 20);
+const bulletCoffee = new Cafe(true, 20);
 bulletCoffee.price = 15;
 
 /*
@@ -195,4 +195,182 @@ Composition:
 - Makes code flexible and testable
 */
 
+
+// ======================================================
+// TOPIC 2: INTERFACES & GENERICS IN TYPESCRIPT
+// ======================================================
+
+
+// ======================================================
+// INTERFACES
+// ======================================================
+
+// ------------------------------------------------------
+// 1. INTERFACE — OBJECT SHAPE
+// ------------------------------------------------------
+
+interface Coffee {
+  isStrong: boolean;
+  price: number;
+  beans?: string;                 // optional property
+  readonly countryOfOrigin: string; // readonly property
+}
+
+/*
+Interfaces define the SHAPE of objects.
+They act as contracts.
+*/
+
+const morningCup: Coffee = {
+  isStrong: true,
+  price: 40,
+  beans: "Arabica",
+  countryOfOrigin: "India",
+};
+
+// ------------------------------------------------------
+// 2. FUNCTION INTERFACE (CALL SIGNATURE)
+// ------------------------------------------------------
+
+interface DiscountCalculator {
+  (price: number): number;
+}
+
+/*
+This is NOT a method.
+This defines the SIGNATURE of a function.
+A signature of a function defines
+1. what arguments the function accepts
+2. what it returns
+*/
+
+const apply50: DiscountCalculator = (p) => p * 0.5;
+
+// ------------------------------------------------------
+// 3. INTERFACE FOR METHODS (BEHAVIOR CONTRACT)
+// ------------------------------------------------------
+
+interface CoffeeMachine {
+  start(): void;
+  stop(): void;
+}
+
+const machine: CoffeeMachine = {
+  start() {
+    console.log("started");
+  },
+  stop() {
+    console.log("stopped");
+  },
+};
+
+/*
+Interfaces can enforce behavior,
+not just data structure.
+*/
+
+// ------------------------------------------------------
+// 4. INDEX SIGNATURES
+// ------------------------------------------------------
+
+interface CoffeeRatings {
+  [beans: string]: number;
+}
+
+/*
+Index signatures:
+- Allow dynamic keys
+- Enforce value type consistency
+*/
+
+const ratings: CoffeeRatings = {
+  arabica: 4.5,
+  espresso: 3.5,
+};
+
+// ------------------------------------------------------
+// 5. INTERFACE EXTENSION
+// ------------------------------------------------------
+
+interface A {
+  a: string;
+}
+
+interface B {
+  b: string;
+}
+
+interface C extends A, B {}
+
+/*
+Interfaces can extend multiple interfaces.
+Used to compose object contracts.
+*/
+
+// ======================================================
+// GENERICS
+// ======================================================
+
+// ------------------------------------------------------
+// 6. GENERIC FUNCTIONS
+// ------------------------------------------------------
+
+function wrapInArray<T>(item: T): T[] {
+  return [item];
+}
+
+/*
+Generics:
+- Preserve type information
+- Avoid `any`
+- Make functions reusable
+*/
+
+wrapInArray("Masala");
+wrapInArray(45);
+wrapInArray({ variant: "Mocha" });
+
+// ------------------------------------------------------
+// 7. MULTIPLE GENERIC PARAMETERS
+// ------------------------------------------------------
+
+function pair<A, B>(a: A, b: B): [A, B] {
+  return [a, b];
+}
+
+/*
+Each generic parameter represents
+an independent type.
+*/
+
+// ------------------------------------------------------
+// 8. GENERIC INTERFACES
+// ------------------------------------------------------
+
+interface Box<T> {
+  content: T;
+}
+
+const numberBox: Box<number> = { content: 10 };
+const stringBox: Box<string> = { content: "10" };
+
+// ------------------------------------------------------
+// 9. REAL-WORLD GENERIC INTERFACE (API RESPONSE)
+// ------------------------------------------------------
+
+interface APIPromise<T> {
+  status: number;
+  data: T;
+}
+
+/*
+Generic interfaces adapt to different data shapes.
+*/
+
+const res: APIPromise<{ flavour: string }> = {
+  status: 200,
+  data: {
+    flavour: "Ginger",
+  },
+};
 
